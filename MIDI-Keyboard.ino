@@ -15,21 +15,9 @@ void setup() {
 
 void loop() {
   pinMode(ANALOG_SELECT_1, OUTPUT);
-  //printAnalogBuffer();
+  // printAnalogSliders();
+  printAnalogBuffer();
   fetchAnalog();
   checkAnalog();
   byte note = getButtonPressed();
-}
-
-
-void printAnalogBuffer() {
-  Serial.println("---------------");
-  for (byte i = 0; i < 16; i++) {
-    //Serial.print("let: ");
-    //Serial.print(i);
-    Serial.print(analogVal[i]);
-    Serial.print(" \ti: ");
-    Serial.print(istantAnalogValue(i));
-    Serial.print("\t");
-  }
 }
