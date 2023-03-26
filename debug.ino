@@ -12,29 +12,26 @@ void printAnalogBuffer() {
 }
 
 void printAnalogSliders() {
-  //Serial.print("Slid_1:");
-  //Serial.print(analogVal[0]);
-  //Serial.print(",");
-  //Serial.print("Slid_2:");
-  //Serial.print(analogVal[8]);
-  //Serial.print(",");
+  Serial.print("Slid_1:");
+  Serial.print(analogVal[ANALOG_PEDAL_VOLUME]);
+  Serial.print(",");
+  Serial.print("Slid_2:");
+  Serial.print(analogVal[ANALOG_UPPER_SUSTAIN]);
+  Serial.print(",");
   Serial.print("Slid_3:");
-  Serial.print(analogVal[ANALOG_BASS_VOLUME]);
+  Serial.print(analogVal[ANALOG_KEYBOARD_BALANCE]);
   Serial.print(",");
   Serial.print("Slid_4:");
-  Serial.print(analogVal[ANALOG_CHORD_VOLUME]);
+  Serial.print(analogVal[ANALOG_PRESET_PERCUSS_VOLUME]);
   Serial.print(",");
   Serial.print("Slid_5:");
-  Serial.print(analogVal[ANALOG_MULTI_P_VOLUME]);
+  Serial.print(analogVal[ANALOG_VIBRATO_SPEED]);
   Serial.print(",");
   Serial.print("Slid_6:");
-  Serial.print(analogVal[ANALOG_RHYTHM_VOLUME]);
+  Serial.print(analogVal[ANALOG_REPEAT_SPEED]);
   Serial.print(",");
   Serial.print("Slid_7:");
-  Serial.print(analogVal[ANALOG_TEMPO]);
-  Serial.print(",");
-  Serial.print("RAW:");
-  Serial.print(analogRead(A5));
+  Serial.print(analogVal[ANALOG_SYNT_PRESET_VOLUME]);
   //Serial.print(",");
   //Serial.print("knob_1:");
   //Serial.print(analogVal[7]);
@@ -45,5 +42,15 @@ void printAnalogSliders() {
   //Serial.print("knob_3:");
   //Serial.print(analogVal[3]);
 
+  Serial.println();
+}
+
+void printRAWAalog() {
+  for (int i = 0; i < 16; i++) {
+    Serial.print(istantAnalogValue(i));
+    Serial.print("\t");
+  }
+  // Serial.print(analogRead(A5));
+  // Serial.print("\t");
   Serial.println();
 }

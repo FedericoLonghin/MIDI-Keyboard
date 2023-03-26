@@ -1,4 +1,4 @@
-int getButtonPressed() {
+void getButtonPressed() {
   digitalWrite(LD, HIGH);
   delayMicroseconds(t);
   digitalWrite(LD, LOW);
@@ -8,21 +8,14 @@ int getButtonPressed() {
   for (int i = 0; i < KEYBOARD_LENGHT; i++) {
 
     if (keyStatus[i] != digitalRead(OUT)) {
-      if (!keyStatus[i]) {
-        noteOn(0, 50 + i, 64);
-      } else {
-        noteOff(0, 50 + i, 64);
-      }
+      toggleAction(i, digitalRead(OUT));
       keyStatus[i] = digitalRead(OUT);
-      MidiUSB.flush();
     }
     digitalWrite(CLK, LOW);
-    delayMicroseconds(t);
+    // delayMicroseconds(t);
     digitalWrite(CLK, HIGH);
-    delayMicroseconds(t);
+    // delayMicroseconds(t);
   }
-
-  return -1;
 }
 
 void fetchAnalog() {
@@ -36,16 +29,16 @@ void fetchAnalog() {
       int val;
       switch (j) {
         case 0:
-          val = analogRead(A0);
+          val = analogRead(ANALOG_IN_0);
           break;
         case 1:
-          val = analogRead(A1);
+          val = analogRead(ANALOG_IN_1);
           break;
         case 2:
-          val = analogRead(A2);
+          val = analogRead(ANALOG_IN_2);
           break;
         case 3:
-          val = analogRead(A3);
+          val = analogRead(ANALOG_IN_3);
           break;
       }
 
@@ -57,22 +50,41 @@ void fetchAnalog() {
 
 int istantAnalogValue(byte add) {
   byte i = add / 4;
+  // digitalWrite(ANALOG_SELECT_0, 0);
+  // digitalWrite(ANALOG_SELECT_1, 1);
   digitalWrite(ANALOG_SELECT_0, i / 2);
   digitalWrite(ANALOG_SELECT_1, i % 2);
   delayMicroseconds(tAnalog);
   switch (add % 4) {
     case 0:
-      return analogRead(A0);
+      return analogRead(ANALOG_IN_0);
       break;
     case 1:
-      return analogRead(A1);
+      return analogRead(ANALOG_IN_1);
       break;
     case 2:
-      return analogRead(A2);
+      return analogRead(ANALOG_IN_2);
       break;
     case 3:
-      return analogRead(A3);
+      return analogRead(ANALOG_IN_3);
       break;
   }
   return 0;
+}
+
+void checkPedal() {
+  newPedalVal = analogRead(A0) * PEDAL_ANALOG_MAX_VAL_COSTANT;
+  int val;
+  if (newPedalVal >= pedalVal + ANALOG_FILTER_IGNORE_RANGE || newPedalVal <= pedalVal - ANALOG_FILTER_IGNORE_RANGE) {
+    if (newPedalVal <= PEDAL_FILTER_HIGH_PASS) val = 0;
+    else if (newPedalVal >= 1023) val = 63;
+    else val = newPedalVal / 16;
+    controlChange(0, 11, val);
+    MidiUSB.flush();
+    pedalVal = newPedalVal;
+  }
+  // Serial.print("z:0,m:1023,new:");
+  // Serial.print(newPedalVal);
+  // Serial.print(",test:");
+  // Serial.println(val * 16);
 }

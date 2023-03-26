@@ -11,13 +11,20 @@ void setup() {
   pinMode(LD, OUTPUT);
   pinMode(OUT, INPUT);
   pinMode(ANALOG_SELECT_0, OUTPUT);
+  pinMode(ANALOG_SELECT_1, OUTPUT);
+  pinMode(13, OUTPUT);
 }
 
 void loop() {
-  pinMode(ANALOG_SELECT_1, OUTPUT);
-  // printAnalogSliders();
-  printAnalogBuffer();
-  fetchAnalog();
-  checkAnalog();
-  byte note = getButtonPressed();
+  //  printAnalogSliders();
+  //printAnalogBuffer();
+  // fetchAnalog();
+  // checkAnalog();
+  getButtonPressed();
+  checkPedal();
+  // printRAWAalog();
+
+  digitalWrite(13, 1);
+  delayMicroseconds(2000);
+  digitalWrite(13, 0);
 }
