@@ -3,8 +3,9 @@
 #define LD 3
 #define ANALOG_SELECT_0 8
 #define ANALOG_SELECT_1 9
-#define KEYBOARD_LENGHT 192
+#define BINARY_IN_LENGHT 192
 #define ANALOG_LENGHT 16
+#define UPPER_KEYBOARD_LENGTH 44
 #define midi true
 #define t 1
 #define tAnalog 200
@@ -16,7 +17,10 @@
 #define ANALOG_FILTER_IGNORE_RANGE 10
 #define ANALOG_DELTA 20
 #define ANALOG_FILTER_TIME 100
+
+
 #define PEDAL_FILTER_HIGH_PASS 35
+#define PEDAL_FILTER_LOW_PASS 960
 #define PEDAL_ANALOG_MULT_COSTANT 1.13
 #define PEDAL_ANALOG_SUB_COSTANT 1000
 
@@ -26,8 +30,10 @@
 #define ANALOG_IN_3 A5
 
 
-bool keyStatus[KEYBOARD_LENGHT];
-
+bool keyStatus[BINARY_IN_LENGHT];
+bool upperKeyboardStatus[UPPER_KEYBOARD_LENGTH];
+String noteName[] = { "DO", "DO#", "RE", "RE#", "MI", "FA", "FA#", "SOL", "SOL#", "LA", "LA#", "SI" };
+String chord = "";
 int analogVal[ANALOG_LENGHT];
 int analogMaxVal[ANALOG_LENGHT] = { 1023, 1023, 1020, 1020, 1023, 1023, 1023, 1016, 1023, 1015, 1018, 1020, 1027, 1023, 0 };
 int analogMinVal[ANALOG_LENGHT] = { 0, 0, 9, 2, 8, 0, 1, 2, 9, 2, 0, 0, 5, 9, 9, 0 };

@@ -54,3 +54,10 @@ void printRAWAalog() {
   // Serial.print("\t");
   Serial.println();
 }
+
+
+void printArray(bool array[], int size) {
+  for (int i = 0; i < size; i++) {
+    Serial.print(array[i]);
+  }
+}

@@ -24,7 +24,12 @@ void loop() {
   checkPedal();
   // printRAWAalog();
 
-  digitalWrite(13, 1);
-  delayMicroseconds(2000);
-  digitalWrite(13, 0);
+  // digitalWrite(13, 1);
+  // delayMicroseconds(2000);
+  // digitalWrite(13, 0);
+
+  extractKeyboardStatus();
+  // printUpperKeyboard();
+
+  checkNewChord();
 }

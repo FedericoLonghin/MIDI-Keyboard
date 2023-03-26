@@ -76,25 +76,25 @@ byte remapAnalog(int val, int min, int max, bool inverted) {
 }
 
 void toggleAction(int index, bool val) {
-  Serial.println(index);
+  // Serial.println(index);
   switch (index) {
     case 100 ... 112:
       if (val)
-        noteOn(0, remappedKeyboard(index), 64);
+        noteOn(0, remappedKeyboard(index) + STARTING_KEY_VAL_PED, 64);
       else
-        noteOff(0, remappedKeyboard(index), 64);
+        noteOff(0, remappedKeyboard(index) + STARTING_KEY_VAL_PED, 64);
       break;
     case 52 ... 95:
       if (val)
-        noteOn(1, remappedKeyboard(index), 64);
+        noteOn(1, remappedKeyboard(index) + STARTING_KEY_VAL_LOW, 64);
       else
-        noteOff(1, remappedKeyboard(index), 64);
+        noteOff(1, remappedKeyboard(index) + STARTING_KEY_VAL_LOW, 64);
       break;
     case 4 ... 47:
       if (val)
-        noteOn(2, remappedKeyboard(index), 64);
+        noteOn(2, remappedKeyboard(index) + STARTING_KEY_VAL_UPP, 64);
       else
-        noteOff(2, remappedKeyboard(index), 64);
+        noteOff(2, remappedKeyboard(index) + STARTING_KEY_VAL_UPP, 64);
       break;
 
     // Registers
@@ -213,34 +213,34 @@ byte remappedKeyboard(byte val) {
   switch (val) {
     //  Pedal Keyboard
     case 100 ... 112:
-      return STARTING_KEY_VAL_PED - 112 - val;
+      return -112 - val;
       break;
     //  Lower Keyboard
     case 89 ... 95:
-      return STARTING_KEY_VAL_LOW - 89 + val;
+      return -89 + val;
       break;
     case 77 ... 88:
-      return STARTING_KEY_VAL_LOW - 77 + 7 + val;
+      return -77 + 7 + val;
       break;
     case 65 ... 76:
-      return STARTING_KEY_VAL_LOW - 65 + 19 + val;
+      return -65 + 19 + val;
       break;
     case 52 ... 64:
-      return STARTING_KEY_VAL_LOW - 52 + 31 + val;
+      return -52 + 31 + val;
       break;
 
     //  Upper Keyboard
     case 41 ... 47:
-      return STARTING_KEY_VAL_UPP - 41 + val;
+      return -41 + val;
       break;
     case 29 ... 40:
-      return STARTING_KEY_VAL_UPP - 22 + val;
+      return -22 + val;
       break;
     case 17 ... 28:
-      return STARTING_KEY_VAL_UPP + 2 + val;
+      return +2 + val;
       break;
     case 4 ... 16:
-      return STARTING_KEY_VAL_UPP + 27 + val;
+      return +27 + val;
       break;
   }
   return -1;

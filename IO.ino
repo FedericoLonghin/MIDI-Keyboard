@@ -5,7 +5,7 @@ void getButtonPressed() {
   delayMicroseconds(t);
   digitalWrite(LD, HIGH);
 
-  for (int i = 0; i < KEYBOARD_LENGHT; i++) {
+  for (int i = 0; i < BINARY_IN_LENGHT; i++) {
 
     if (keyStatus[i] != digitalRead(OUT)) {
       toggleAction(i, digitalRead(OUT));
@@ -73,18 +73,28 @@ int istantAnalogValue(byte add) {
 }
 
 void checkPedal() {
-  newPedalVal = PEDAL_ANALOG_SUB_COSTANT-analogRead(A0) * PEDAL_ANALOG_MULT_COSTANT;
+  bool OOR = false;  // out of range
   int val;
+  newPedalVal = PEDAL_ANALOG_SUB_COSTANT - analogRead(A0) * PEDAL_ANALOG_MULT_COSTANT;
   if (newPedalVal >= pedalVal + ANALOG_FILTER_IGNORE_RANGE || newPedalVal <= pedalVal - ANALOG_FILTER_IGNORE_RANGE) {
-    if (newPedalVal <= PEDAL_FILTER_HIGH_PASS) val = 0;
-    else if (newPedalVal >= 1023) val = 64;
-    else val = newPedalVal / 16;
-    controlChange(0, 11, val);
-    MidiUSB.flush();
-    pedalVal = newPedalVal;
+    if (newPedalVal <= PEDAL_FILTER_HIGH_PASS) {
+      val = 0;
+      OOR = true;
+    } else if (newPedalVal >= PEDAL_FILTER_LOW_PASS) {
+      val = 1023;
+      OOR = true;
+    }
+    if (!OOR) {
+      val = newPedalVal;
+    }
+    if (pedalVal != 0 && pedalVal != 1023) {
+      controlChange(0, 11, val / 16);
+      MidiUSB.flush();
+    }
+    pedalVal = val;
   }
-  Serial.print("z:0,m:1023,new:");
-  Serial.print(newPedalVal);
-  Serial.print(",test:");
-  Serial.println(val * 16);
+  // Serial.print("z:0,m:1023,new:");
+  // Serial.print(newPedalVal);
+  // Serial.print(",test:");
+  // Serial.println(val * 16);
 }
