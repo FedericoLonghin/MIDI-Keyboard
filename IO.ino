@@ -73,18 +73,18 @@ int istantAnalogValue(byte add) {
 }
 
 void checkPedal() {
-  newPedalVal = analogRead(A0) * PEDAL_ANALOG_MAX_VAL_COSTANT;
+  newPedalVal = PEDAL_ANALOG_SUB_COSTANT-analogRead(A0) * PEDAL_ANALOG_MULT_COSTANT;
   int val;
   if (newPedalVal >= pedalVal + ANALOG_FILTER_IGNORE_RANGE || newPedalVal <= pedalVal - ANALOG_FILTER_IGNORE_RANGE) {
     if (newPedalVal <= PEDAL_FILTER_HIGH_PASS) val = 0;
-    else if (newPedalVal >= 1023) val = 63;
+    else if (newPedalVal >= 1023) val = 64;
     else val = newPedalVal / 16;
     controlChange(0, 11, val);
     MidiUSB.flush();
     pedalVal = newPedalVal;
   }
-  // Serial.print("z:0,m:1023,new:");
-  // Serial.print(newPedalVal);
-  // Serial.print(",test:");
-  // Serial.println(val * 16);
+  Serial.print("z:0,m:1023,new:");
+  Serial.print(newPedalVal);
+  Serial.print(",test:");
+  Serial.println(val * 16);
 }
