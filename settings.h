@@ -1,6 +1,6 @@
-#define CLK 4
-#define OUT 2
-#define LD 3
+#define OUT 4
+#define LD 5
+#define CLK 6
 #define ANALOG_SELECT_0 8
 #define ANALOG_SELECT_1 9
 #define BINARY_IN_LENGHT 192

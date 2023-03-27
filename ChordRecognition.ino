@@ -1,6 +1,15 @@
 void checkNewChord() {
   String newChord = getChord(upperKeyboardStatus, UPPER_KEYBOARD_LENGTH, 5);
-  if (newChord != chord && newChord != "") Serial.println(newChord);
+  if (newChord != chord) {
+    if (newChord != "") {
+      Serial.println(newChord);
+      lcd.setCursor(7, 1);
+      lcd.print(newChord);
+    } else {
+      lcd.setCursor(7, 1);
+      lcd.print("       ");
+    }
+  }
   chord = newChord;
 }
 
@@ -34,18 +43,21 @@ String getChord(bool keyArray[], byte keyLength, int startNote) {
     case 3:
       if (shortKeyArray[4] && shortKeyArray[7]) {
         str += noteName[(i + startNote) % 12];
+        str += "  ";
       }
       if (shortKeyArray[3] && shortKeyArray[7]) {
         str += noteName[(i + startNote) % 12];
         str += "m";
+        str += " ";
       }
       break;
     case 4:
-      if (shortKeyArray[4] && shortKeyArray[7] && shortKeyArray[11]) {
+      if (shortKeyArray[4] && shortKeyArray[7] && shortKeyArray[10]) {
         str += noteName[(i + startNote) % 12];
         str += "7";
+        str += " ";
       }
-      if (shortKeyArray[3] && shortKeyArray[7] && shortKeyArray[11]) {
+      if (shortKeyArray[3] && shortKeyArray[7] && shortKeyArray[10]) {
         str += noteName[(i + startNote) % 12];
         str += "m";
         str += "7";
