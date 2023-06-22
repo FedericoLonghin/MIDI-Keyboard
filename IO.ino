@@ -4,11 +4,30 @@ void getButtonPressed() {
   digitalWrite(LD, LOW);
   delayMicroseconds(t);
   digitalWrite(LD, HIGH);
-
   for (int i = 0; i < BINARY_IN_LENGHT; i++) {
+
+    //UPPER KEYBOARD
+    // if (i >= 0 && i < UPPER_KEYBOARD_LENGTH) {
+    //   lowerKeyboardStatus[remappedIO(i)] = keyStatus[i];
+    // }
+
+
+
+    // //LOWER KEYBOARD
+    // else if (i >= 52 && i < UPPER_KEYBOARD_LENGTH + 52) {
+    //   //lowerKeyboardStatus[remappedIO(i)] = keyStatus[i];
+    // }
+
+    // //PEDAL KEYBORARD
+    // else if (i >= 52 && i < PEDAL_KEYBOARD_LENGTH +0 ) {
+    //   //lowerKeyboardStatus[remappedIO(i)] = keyStatus[i];
+    // }
+    // //OTHER
+
 
     if (keyStatus[i] != digitalRead(OUT)) {
       toggleAction(i, digitalRead(OUT));
+
       keyStatus[i] = digitalRead(OUT);
     }
     digitalWrite(CLK, LOW);
@@ -90,6 +109,7 @@ void checkPedal() {
     if (pedalVal != 0 && pedalVal != 1023) {
       controlChange(0, 11, val / 16);
       MidiUSB.flush();
+      // displayForceUpdate = true;
     }
     pedalVal = val;
   }
@@ -97,4 +117,20 @@ void checkPedal() {
   // Serial.print(newPedalVal);
   // Serial.print(",test:");
   // Serial.println(val * 16);
+}
+
+void checkEncoder() {
+
+  if (!digitalRead(ENCODER_OUT_A) && digitalRead(ENCODER_OUT_B) && encoder_out_a_prev) {
+    encoder_inc = true;
+    encoder_dec = false;
+  } else if (digitalRead(ENCODER_OUT_A) && !digitalRead(ENCODER_OUT_B) && encoder_out_b_prev) {
+    encoder_inc = false;
+    encoder_dec = true;
+  } else {
+    encoder_inc = false;
+    encoder_dec = false;
+  }
+  encoder_out_a_prev = digitalRead(ENCODER_OUT_A);
+  encoder_out_b_prev = digitalRead(ENCODER_OUT_B);
 }

@@ -14,30 +14,39 @@ void setup() {
   pinMode(OUT, INPUT);
   pinMode(ANALOG_SELECT_0, OUTPUT);
   pinMode(ANALOG_SELECT_1, OUTPUT);
-  pinMode(13, OUTPUT);
+  pinMode(13, INPUT_PULLUP);
+  pinMode(12, INPUT_PULLUP);
+  pinMode(11, INPUT_PULLUP);
+  // pinMode(13, OUTPUT);
 
   lcd.init();
   lcd.backlight();
-  lcd.setCursor(0, 1);
-  lcd.print("Chord:");
 }
 
 void loop() {
-  Serial.println("aaa");
+  // Serial.print("d11:");
+  // Serial.print(digitalRead(11));
+  // Serial.print(",d12:");
+  // Serial.print(digitalRead(12));
+  // Serial.print(",d13:");
+  // Serial.println(digitalRead(13));
+
   //  printAnalogSliders();
   //printAnalogBuffer();
   // fetchAnalog();
   // checkAnalog();
-  getButtonPressed();
-  checkPedal();
+  extractKeyboardStatus();
   // printRAWAalog();
 
-  // digitalWrite(13, 1);
   // delayMicroseconds(2000);
-  // digitalWrite(13, 0);
+  getButtonPressed();
+  // checkPedal();
+  checkEncoder();
+  printArray(keyStatus, BINARY_IN_LENGHT);
+  Serial.println();
+  if (showChords) {
+    checkNewChord();
+  }
 
-  extractKeyboardStatus();
-  // printUpperKeyboard();
-
-  checkNewChord();
+  updateDisplay();
 }

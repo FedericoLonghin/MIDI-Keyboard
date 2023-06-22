@@ -76,25 +76,25 @@ byte remapAnalog(int val, int min, int max, bool inverted) {
 }
 
 void toggleAction(int index, bool val) {
-  // Serial.println(index);
+  Serial.println(index);
   switch (index) {
     case 100 ... 112:
       if (val)
-        noteOn(0, remappedKeyboard(index) + STARTING_KEY_VAL_PED, 64);
+        noteOn(0, remappedIO(index) + STARTING_KEY_VAL_PED + shiftTone, 64);
       else
-        noteOff(0, remappedKeyboard(index) + STARTING_KEY_VAL_PED, 64);
+        noteOff(0, remappedIO(index) + STARTING_KEY_VAL_PED + shiftTone, 64);
       break;
     case 52 ... 95:
       if (val)
-        noteOn(1, remappedKeyboard(index) + STARTING_KEY_VAL_LOW, 64);
+        noteOn(1, remappedIO(index) + STARTING_KEY_VAL_LOW + shiftTone, 64);
       else
-        noteOff(1, remappedKeyboard(index) + STARTING_KEY_VAL_LOW, 64);
+        noteOff(1, remappedIO(index) + STARTING_KEY_VAL_LOW + shiftTone, 64);
       break;
     case 4 ... 47:
       if (val)
-        noteOn(2, remappedKeyboard(index) + STARTING_KEY_VAL_UPP, 64);
+        noteOn(2, remappedIO(index) + STARTING_KEY_VAL_UPP + shiftTone, 64);
       else
-        noteOff(2, remappedKeyboard(index) + STARTING_KEY_VAL_UPP, 64);
+        noteOff(2, remappedIO(index) + STARTING_KEY_VAL_UPP + shiftTone, 64);
       break;
 
     // Registers
@@ -128,33 +128,43 @@ void toggleAction(int index, bool val) {
       // Upper
     case DIGITAL_UPPER_FLUTE_16:
       controlChange(2, 20, val * 64);
+      displayAnimation_register("Flute 16", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_CELLO_16:
       controlChange(2, 21, val * 64);
+      displayAnimation_register("Cello 16", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_CLARINET_16:
       controlChange(2, 22, val * 64);
+      displayAnimation_register("Clari 16", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_FLUTE_8:
       controlChange(2, 23, val * 64);
+      displayAnimation_register("Flute 8", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_TRUMPET_8:
       controlChange(2, 24, val * 64);
+      displayAnimation_register("Trump 8", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_OBOE_8:
       controlChange(2, 25, val * 64);
+      displayAnimation_register("Oboe  8", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_REED_8:
       controlChange(2, 26, val * 64);
+      displayAnimation_register("Reed  8", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_FLUTE_4:
       controlChange(2, 27, val * 64);
+      displayAnimation_register("Flute 4", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_VIOLIN_4:
       controlChange(2, 28, val * 64);
+      displayAnimation_register("Violi 4", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_FLUTE_2:
       controlChange(2, 29, val * 64);
+      displayAnimation_register("Flute 2", val, DISPLAY_ANIMATION_DURATION);
       break;
     case DIGITAL_UPPER_CANCEL:
       controlChange(2, 30, val * 64);
@@ -205,11 +215,22 @@ void toggleAction(int index, bool val) {
     case DIGITAL_SPACE_SLOW_FAST:
       controlChange(3, 30, val * 64);
       break;
+    case DIGITAL_SYNTH_SEMI_DOWN:
+      shiftTone--;
+      displayForceUpdate = true;
+      break;
+    case DIGITAL_SYNTH_SEMI_UP:
+      shiftTone++;
+      displayForceUpdate = true;
+      break;
+    case DIGITAL_SYNTH_CANCEL:
+      showChords = !showChords;
+      break;
   }
   MidiUSB.flush();
 }
 
-byte remappedKeyboard(byte val) {
+byte remappedIO(byte val) {
   switch (val) {
     //  Pedal Keyboard
     case 100 ... 112:

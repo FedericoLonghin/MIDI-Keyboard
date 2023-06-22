@@ -3,9 +3,14 @@
 #define CLK 6
 #define ANALOG_SELECT_0 8
 #define ANALOG_SELECT_1 9
+#define ENCODER_OUT_A 11
+#define ENCODER_OUT_B 12
+#define ENCODER_SW 13
 #define BINARY_IN_LENGHT 192
 #define ANALOG_LENGHT 16
 #define UPPER_KEYBOARD_LENGTH 44
+#define LOWER_KEYBOARD_LENGTH 44
+#define PEDAL_KEYBOARD_LENGTH 13
 #define midi true
 #define t 1
 #define tAnalog 200
@@ -30,8 +35,27 @@
 #define ANALOG_IN_3 A5
 
 
+bool encoder_out_a_prev;
+bool encoder_out_b_prev;
+bool encoder_inc,encoder_dec;
+bool showChords=false;
+//Display animation
+bool displayForceUpdate = true;
+
+String displayShowText = "";
+int displayShowDuration = 0;
+bool displayShowOnShow = false;
+#define DISPLAY_ANIMATION_DURATION 200
+
+int displayChordDuration = 0;
+bool displayChordOnShow = false;
+#define DISPLAY_CHORD_DURATION 200
+
+int shiftTone = 0;
+
 bool keyStatus[BINARY_IN_LENGHT];
 bool upperKeyboardStatus[UPPER_KEYBOARD_LENGTH];
+bool lowerKeyboardStatus[UPPER_KEYBOARD_LENGTH];
 String noteName[] = { "DO", "DO#", "RE", "RE#", "MI", "FA", "FA#", "SOL", "SOL#", "LA", "LA#", "SI" };
 String chord = "";
 int analogVal[ANALOG_LENGHT];
@@ -101,6 +125,20 @@ int newPedalVal;
 #define DIGITAL_PRESET_BANJO 161
 #define DIGITAL_PRESET_MANDOLIN 160
 #define DIGITAL_PRESET_STRING_ENSEMBLE 159
+
+//synth presets
+#define DIGITAL_SYNTH_CANCEL 158
+#define DIGITAL_SYNTH_PRES1 157
+#define DIGITAL_SYNTH_PRES2 156
+#define DIGITAL_SYNTH_PRES3 155
+#define DIGITAL_SYNTH_PRES4 154
+#define DIGITAL_SYNTH_PRES5 153
+#define DIGITAL_SYNTH_PRES6 152
+#define DIGITAL_SYNTH_SEMI_DOWN 151
+#define DIGITAL_SYNTH_SEMI_UP 150
+#define DIGITAL_SYNTH_KEY_DOWN 149
+#define DIGITAL_SYNTH_KEY_UP 148
+
 
 //  effects
 #define DIGITAL_EFFECT_VIBRATO_1 190

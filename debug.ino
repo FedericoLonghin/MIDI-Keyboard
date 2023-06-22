@@ -61,3 +61,9 @@ void printArray(bool array[], int size) {
     Serial.print(array[i]);
   }
 }
+
+void printUpperKeyboard() {
+  for (byte i = 0; i < UPPER_KEYBOARD_LENGTH; i++) {
+    Serial.print(lowerKeyboardStatus[i]);
+  }
+}

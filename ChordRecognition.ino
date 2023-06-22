@@ -1,34 +1,26 @@
 void checkNewChord() {
-  String newChord = getChord(upperKeyboardStatus, UPPER_KEYBOARD_LENGTH, 5);
+  String newChord = getChord(lowerKeyboardStatus, LOWER_KEYBOARD_LENGTH, 5);
   if (newChord != chord) {
-    if (newChord != "") {
-      Serial.println(newChord);
-      lcd.setCursor(7, 1);
-      lcd.print(newChord);
-    } else {
-      lcd.setCursor(7, 1);
-      lcd.print("       ");
-    }
+
+    Serial.println(newChord);
+    displayForceUpdate = true;
   }
   chord = newChord;
 }
 
 
-void extractKeyboardStatus() {
+void extractKeyboardStatus() {  //deprecated
   for (byte i = 0; i < UPPER_KEYBOARD_LENGTH; i++) {
-    upperKeyboardStatus[remappedKeyboard(i + 4)] = keyStatus[i + 4];
+    upperKeyboardStatus[remappedIO(i + 4)] = keyStatus[i + 4];
+    lowerKeyboardStatus[remappedIO(i + 52)] = keyStatus[i + 52];
   }
 }
 
-void printUpperKeyboard() {
-  for (byte i = 0; i < UPPER_KEYBOARD_LENGTH; i++) {
-    Serial.print(upperKeyboardStatus[i]);
-  }
-}
+
 
 String getChord(bool keyArray[], byte keyLength, int startNote) {
   bool shortKeyArray[12];
-  String str = "";
+  String str = "       ";
   int i = 0;
   while (i < keyLength && !keyArray[i]) { i++; }
   for (byte j = 0; j < 12; j++) { shortKeyArray[j] = keyArray[i + j]; }
@@ -42,26 +34,45 @@ String getChord(bool keyArray[], byte keyLength, int startNote) {
       break;
     case 3:
       if (shortKeyArray[4] && shortKeyArray[7]) {
-        str += noteName[(i + startNote) % 12];
+        str = noteName[(i + startNote) % 12];
         str += "  ";
-      }
-      if (shortKeyArray[3] && shortKeyArray[7]) {
-        str += noteName[(i + startNote) % 12];
+      } else if (shortKeyArray[3] && shortKeyArray[7]) {
+        str = noteName[(i + startNote) % 12];
         str += "m";
+        str += " ";
+      } else if (shortKeyArray[3] && shortKeyArray[8]) {
+        str = noteName[(i + startNote + 8) % 12];
+        str += "/";
+        str += noteName[(i + startNote) % 12];
+        str += " ";
+      } else if (shortKeyArray[5] && shortKeyArray[9]) {
+        str = noteName[(i + startNote + 5) % 12];
+        str += "/";
+        str += noteName[(i + startNote) % 12];
+        str += " ";
+      } else if (shortKeyArray[5] && shortKeyArray[8]) {
+        str = noteName[(i + startNote + 5) % 12];
+        str += "m/";
+        str += noteName[(i + startNote) % 12];
+        str += " ";
+      } else if (shortKeyArray[3] && shortKeyArray[9]) {
+        str = noteName[(i + startNote + 3) % 12];
+        str += "m/";
+        str += noteName[(i + startNote) % 12];
         str += " ";
       }
       break;
     case 4:
       if (shortKeyArray[4] && shortKeyArray[7] && shortKeyArray[10]) {
-        str += noteName[(i + startNote) % 12];
+        str = noteName[(i + startNote) % 12];
         str += "7";
         str += " ";
-      }
-      if (shortKeyArray[3] && shortKeyArray[7] && shortKeyArray[10]) {
-        str += noteName[(i + startNote) % 12];
+      } else if (shortKeyArray[3] && shortKeyArray[7] && shortKeyArray[10]) {
+        str = noteName[(i + startNote) % 12];
         str += "m";
         str += "7";
       }
+
       break;
   }
 
@@ -70,7 +81,7 @@ String getChord(bool keyArray[], byte keyLength, int startNote) {
   return str;
 }
 
-byte noteNumber(bool array[], byte size) {
+byte noteNumber(bool array[], byte size) {  //return how many key is pressed
   byte num = 0;
   for (byte i = 0; i < size; i++) {
     if (array[i]) num++;
